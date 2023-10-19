@@ -1,66 +1,63 @@
-import { breakpointDesktop, breakpointTablet } from './variables.js';
+import { breakpointMobile, breakpointTablet, FontWeight } from './variables.js';
 
 const colors = {
-  mainBg: '',
-  secondaryBg: '',
-  buttonBg: '',
-  error: '#DC0C31',
-  link: '#0029FF',
-  white: '#FFFFFF',
-  //   neutral colors
-  mainBtnText: '#FCFCFC',
-  disabledBtnBg: '#CECECE',
-  mainPlaceholder: '#939393',
-  disabledBtnText: '#464646',
-  mainLabel: '#353535',
-  mainText: '#232323',
-  mainTitle: '#121212',
-  //   primary color
-  mainAccent: '#FFBD00',
-  secondaryAccent: '#3342CC',
-  textAccent: '#FDF5DD',
+  black: '#172234',
+  onyx: '#000000',
+  white: '#ffffff',
+  desert: '#b29f7e',
+  platinum: '#e0e0e0',
 };
 
-const fonts = {
-  body: {
-    fontSize: { desktop: 16, tablet: 14, mobile: 12 },
-    lineHeight: { tablet: 1.4, mobile: 1.33 },
-    letterSpacing: { tablet: 0.25, mobile: 0.4 },
-    fontWeight: 400,
-  },
-  label: {
-    fontSize: { desktop: 14, tablet: 12, mobile: 11 },
-    lineHeight: { tablet: 1.33, mobile: 1.45 },
-    letterSpacing: { desktop: 0.1, mobile: 0.5 },
-    fontWeight: 400,
-  },
-  title: {
-    fontSize: { desktop: 22, tablet: 16, mobile: 14 },
-    lineHeight: 1.4,
-    letterSpacing: { tablet: 0.15, mobile: 0.1 },
-    fontWeight: { desktop: 700, tablet: 600, mobile: 500 },
-  },
-  headline: {
-    fontSize: { desktop: 32, tablet: 28, mobile: 22 },
-    lineHeight: { desktop: 1.25, tablet: 1.3, mobile: 1.4 },
-    fontWeight: { tablet: 600, mobile: 400 },
-  },
-  display: {
-    fontSize: { desktop: 57, tablet: 45, mobile: 36 },
-    lineHeight: { desktop: 1.1, tablet: 1.15, mobile: 1.2 },
-    fontWeight: 700,
-  },
+const fontWeights: typeof FontWeight = FontWeight;
+
+const fontSizes = {
+  xs: '14px',
+  s: '16px',
+  m: '18px',
+  xm: '20px',
+  l: '24px',
+  xl: '28px',
+  sb: '64px',
+};
+
+const letterSpacings = {
+  subheader: '-0.48px',
+};
+
+const lineHeights = {
+  title: '1.21',
+  content: '1.22',
+  display: '1.25',
+  subheader: '1.33',
+  btnText: '1.37',
+  label: '1.42',
+  input: '1.57',
+  contentTitle: '1.7',
+};
+
+const borders = {
+  normal: '1px solid',
+  medium: '2px solid',
 };
 
 const media = {
+  mobile: `min-width: ${breakpointMobile}px`,
   tablet: `min-width: ${breakpointTablet}px`,
-  desktop: `min-width: ${breakpointDesktop}px`,
+};
+
+const transitions = {
+  main: 'all 250ms cubic-bezier(0.4, 0, 0.2, 1)',
 };
 
 const theme = {
   colors,
   media,
-  fonts,
+  fontWeights,
+  fontSizes,
+  letterSpacings,
+  lineHeights,
+  borders,
+  transitions,
 };
 
 export { theme };
