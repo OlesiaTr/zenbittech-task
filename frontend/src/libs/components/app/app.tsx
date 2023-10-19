@@ -8,6 +8,7 @@ import {
   useLocation,
 } from '#libs/hooks/hooks.js';
 import { actions as userActions } from '#slices/users/users.js';
+import { GlobalStyle } from '#styles/global-style.js';
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
@@ -27,6 +28,7 @@ const App: React.FC = () => {
 
   return (
     <>
+      <GlobalStyle />
       <img src={reactLogo} className="App-logo" width="30" alt="logo" />
 
       <ul className="App-navigation-list">
