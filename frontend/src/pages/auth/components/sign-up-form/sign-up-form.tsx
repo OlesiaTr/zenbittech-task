@@ -36,7 +36,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
   return (
     <Container>
       <Title>Sign Up</Title>
-      <Form name="SignInForm" onSubmit={handleFormSubmit}>
+      <Form name="SignUpForm" onSubmit={handleFormSubmit}>
         <Fieldset>
           <Input
             type="text"
@@ -62,7 +62,7 @@ const SignUpForm: React.FC<Properties> = ({ onSubmit }: Properties) => {
             placeholder="Enter password"
           />
         </Fieldset>
-        <Button label="Sign Up" isWidthFull variant="primary" />
+        <Button type="submit" label="Sign Up" isWidthFull variant="primary" />
         <Text>
           <Span>Already have an account? </Span>
           <Link to={AppRoute.SIGN_IN}>Log In</Link>
