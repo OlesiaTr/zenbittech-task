@@ -5,6 +5,7 @@ const colors = {
   onyx: '#000000',
   white: '#ffffff',
   desert: '#b29f7e',
+  'desert-70': 'rgb(178 159 126 / 70%)',
   platinum: '#e0e0e0',
 };
 
@@ -36,6 +37,7 @@ const lineHeights = {
 };
 
 const borders = {
+  none: 'none',
   normal: '1px solid',
   medium: '2px solid',
 };
