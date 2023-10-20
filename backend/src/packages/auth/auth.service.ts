@@ -1,7 +1,4 @@
-import {
-  type UserSignUpRequestDto,
-  type UserSignUpResponseDto,
-} from '#packages/users/libs/types/types.js';
+import { type UserSignUpRequestDto } from '#packages/users/libs/types/types.js';
 import { type UserService } from '#packages/users/user.service.js';
 
 class AuthService {
@@ -13,7 +10,8 @@ class AuthService {
 
   public signUp(
     userRequestDto: UserSignUpRequestDto,
-  ): Promise<UserSignUpResponseDto> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  ): Promise<any> {
     return this.userService.create(userRequestDto);
   }
 }

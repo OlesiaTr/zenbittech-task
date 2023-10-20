@@ -5,7 +5,6 @@ import { type UserRepository } from '#packages/users/user.repository.js';
 import {
   type UserGetAllResponseDto,
   type UserSignUpRequestDto,
-  type UserSignUpResponseDto,
 } from './libs/types/types.js';
 
 class UserService implements Service {
@@ -27,9 +26,8 @@ class UserService implements Service {
     };
   }
 
-  public async create(
-    payload: UserSignUpRequestDto,
-  ): Promise<UserSignUpResponseDto> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  public async create(payload: UserSignUpRequestDto): Promise<any> {
     const item = await this.userRepository.create(
       UserEntity.initializeNew({
         email: payload.email,
