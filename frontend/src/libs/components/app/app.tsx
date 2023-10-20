@@ -1,26 +1,50 @@
-import { Header, RouterOutlet } from '#libs/components/components.js';
-import { AppRoute } from '#libs/enums/enums.js';
-import { useAppDispatch, useEffect, useLocation } from '#libs/hooks/hooks.js';
-import { actions as userActions } from '#slices/users/users.js';
+import { Header, Loader, RouterOutlet } from '#libs/components/components.js';
+import { DataStatus } from '#libs/enums/enums.js';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useEffect,
+  useNavigate,
+} from '#libs/hooks/hooks.js';
+import { actions as appActions } from '#slices/app/app.js';
+import { actions as authActions } from '#slices/auth/auth.js';
 import { GlobalStyle } from '#styles/global-style.js';
 
 const App: React.FC = () => {
-  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-  const isRoot = pathname === AppRoute.ROOT;
+  const { authenticatedUserDataStatus, authenticatedUser, redirectTo } =
+    useAppSelector(({ auth, app }) => ({
+      authenticatedUserDataStatus: auth.authenticatedUserDataStatus,
+      authenticatedUser: auth.authenticatedUser,
+      redirectTo: app.redirectTo,
+    }));
+
+  const isUserAuthenticated = Boolean(authenticatedUser);
 
   useEffect(() => {
-    if (isRoot) {
-      void dispatch(userActions.loadAll());
+    if (!isUserAuthenticated) {
+      void dispatch(authActions.getAuthenticatedUser());
     }
-  }, [isRoot, dispatch]);
+  }, [isUserAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (redirectTo) {
+      navigate(redirectTo);
+      dispatch(appActions.navigate(null));
+    }
+  }, [dispatch, navigate, redirectTo]);
+
+  if (authenticatedUserDataStatus === DataStatus.PENDING) {
+    return <Loader />;
+  }
 
   return (
     <>
       <GlobalStyle />
 
-      <Header />
+      <Header user={authenticatedUser} />
 
       <div>
         <RouterOutlet />
