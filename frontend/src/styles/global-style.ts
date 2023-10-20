@@ -151,7 +151,7 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.3;
     overflow-x: hidden;
     width: 100%;
-    font-family: Merriweather, Arial, sans-serif;
+    font-family: "Merriweather", serif;
   }
 `;
 

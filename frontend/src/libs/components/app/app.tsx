@@ -1,4 +1,4 @@
-import { Link, RouterOutlet } from '#libs/components/components.js';
+import { Header, Link, RouterOutlet } from '#libs/components/components.js';
 import { AppRoute } from '#libs/enums/enums.js';
 import {
   useAppDispatch,
@@ -28,6 +28,8 @@ const App: React.FC = () => {
   return (
     <>
       <GlobalStyle />
+
+      <Header />
 
       <ul className="App-navigation-list">
         <li>
