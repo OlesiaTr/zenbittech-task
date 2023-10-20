@@ -1,6 +1,12 @@
 import { type Repository } from '#libs/types/types.js';
 import { UserEntity } from '#packages/users/user.entity.js';
-import { type UserModel } from '#packages/users/user.model.js';
+import { type UserModel } from '#packages/users/users.js';
+
+import {
+  type UserCommonQueryResponse,
+  type UserWithPasswordQueryResponse,
+} from './libs/types/types.js';
+import { UserWithPasswordEntity } from './user-with-password.entity.js';
 
 class UserRepository implements Repository {
   private userModel: typeof UserModel;
@@ -13,14 +19,52 @@ class UserRepository implements Repository {
     return Promise.resolve(null);
   }
 
-  public async findAll(): Promise<UserEntity[]> {
-    const users = await this.userModel.query().execute();
+  public async findById(id: number): Promise<UserWithPasswordEntity | null> {
+    const user = await this.userModel
+      .query()
+      .findById(id)
+      .castTo<UserWithPasswordQueryResponse | undefined>()
+      .execute();
 
-    return users.map((user) => UserEntity.initialize(user));
+    if (!user) {
+      return null;
+    }
+
+    return UserWithPasswordEntity.initialize({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      passwordHash: user.passwordHash,
+      passwordSalt: user.passwordSalt,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
+    });
   }
 
-  public async create(entity: UserEntity): Promise<UserEntity> {
-    const { email, passwordSalt, passwordHash } = entity.toNewObject();
+  public async findAll(): Promise<UserWithPasswordEntity[]> {
+    const users = await this.userModel
+      .query()
+      .select()
+      .castTo<UserWithPasswordQueryResponse[]>()
+      .execute();
+
+    return users.map((user) => {
+      return UserWithPasswordEntity.initialize({
+        id: user.id,
+        email: user.email,
+        passwordHash: user.passwordHash,
+        passwordSalt: user.passwordSalt,
+        name: user.name,
+        createdAt: new Date(user.createdAt),
+        updatedAt: new Date(user.updatedAt),
+      });
+    });
+  }
+
+  public async create(
+    entity: UserWithPasswordEntity,
+  ): Promise<UserWithPasswordEntity> {
+    const { email, passwordSalt, passwordHash, name } = entity.toNewObject();
 
     const user = await this.userModel
       .query()
@@ -28,11 +72,21 @@ class UserRepository implements Repository {
         email,
         passwordSalt,
         passwordHash,
+        name,
       })
       .returning('*')
+      .castTo<UserWithPasswordQueryResponse>()
       .execute();
 
-    return UserEntity.initialize(user);
+    return UserWithPasswordEntity.initialize({
+      id: user.id,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      passwordSalt: user.passwordSalt,
+      name: user.name,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
+    });
   }
 
   public update(): ReturnType<Repository['update']> {
@@ -41,6 +95,48 @@ class UserRepository implements Repository {
 
   public delete(): ReturnType<Repository['delete']> {
     return Promise.resolve(true);
+  }
+
+  public async findByEmail(email: string): Promise<UserEntity | null> {
+    const user = await this.userModel
+      .query()
+      .modify('withoutPassword')
+      .findOne({ email })
+      .castTo<UserCommonQueryResponse | undefined>();
+
+    if (!user) {
+      return null;
+    }
+
+    return UserEntity.initialize({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
+    });
+  }
+
+  public async findByEmailWithPassword(
+    email: string,
+  ): Promise<UserWithPasswordEntity | null> {
+    const user = await this.userModel
+      .query()
+      .findOne({ email })
+      .castTo<UserWithPasswordQueryResponse | undefined>();
+    if (!user) {
+      return null;
+    }
+
+    return UserWithPasswordEntity.initialize({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      passwordHash: user.passwordHash,
+      passwordSalt: user.passwordSalt,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
+    });
   }
 }
 

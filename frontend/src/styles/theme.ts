@@ -21,6 +21,11 @@ const fontSizes = {
   sb: '64px',
 };
 
+const fontFamilies = {
+  lato: 'Lato, sans-serif',
+  merriweather: 'Merriweather, serif',
+};
+
 const letterSpacings = {
   subheader: '-0.48px',
 };
@@ -43,8 +48,8 @@ const borders = {
 };
 
 const media = {
-  mobile: `min-width: ${breakpointMobile}px`,
-  tablet: `min-width: ${breakpointTablet}px`,
+  mobile: `max-width: ${breakpointMobile}px`,
+  tablet: `max-width: ${breakpointTablet}px`,
 };
 
 const transitions = {
@@ -60,6 +65,7 @@ const theme = {
   lineHeights,
   borders,
   transitions,
+  fontFamilies,
 };
 
 export { theme };

@@ -1,63 +1,54 @@
-import { Header, Link, RouterOutlet } from '#libs/components/components.js';
-import { AppRoute } from '#libs/enums/enums.js';
+import { Header, Loader, RouterOutlet } from '#libs/components/components.js';
+import { DataStatus } from '#libs/enums/enums.js';
 import {
   useAppDispatch,
   useAppSelector,
   useEffect,
-  useLocation,
+  useNavigate,
 } from '#libs/hooks/hooks.js';
-import { actions as userActions } from '#slices/users/users.js';
+import { actions as appActions } from '#slices/app/app.js';
+import { actions as authActions } from '#slices/auth/auth.js';
 import { GlobalStyle } from '#styles/global-style.js';
 
 const App: React.FC = () => {
-  const { pathname } = useLocation();
   const dispatch = useAppDispatch();
-  const { users, dataStatus } = useAppSelector(({ users }) => ({
-    users: users.users,
-    dataStatus: users.dataStatus,
-  }));
+  const navigate = useNavigate();
 
-  const isRoot = pathname === AppRoute.ROOT;
+  const { authenticatedUserDataStatus, authenticatedUser, redirectTo } =
+    useAppSelector(({ auth, app }) => ({
+      authenticatedUserDataStatus: auth.authenticatedUserDataStatus,
+      authenticatedUser: auth.authenticatedUser,
+      redirectTo: app.redirectTo,
+    }));
+
+  const isUserAuthenticated = Boolean(authenticatedUser);
 
   useEffect(() => {
-    if (isRoot) {
-      void dispatch(userActions.loadAll());
+    if (!isUserAuthenticated) {
+      void dispatch(authActions.getAuthenticatedUser());
     }
-  }, [isRoot, dispatch]);
+  }, [isUserAuthenticated, dispatch]);
+
+  useEffect(() => {
+    if (redirectTo) {
+      navigate(redirectTo);
+      dispatch(appActions.navigate(null));
+    }
+  }, [dispatch, navigate, redirectTo]);
+
+  if (authenticatedUserDataStatus === DataStatus.PENDING) {
+    return <Loader />;
+  }
 
   return (
     <>
       <GlobalStyle />
 
-      <Header />
-
-      <ul className="App-navigation-list">
-        <li>
-          <Link to={AppRoute.ROOT}>Root</Link>
-        </li>
-        <li>
-          <Link to={AppRoute.SIGN_IN}>Sign in</Link>
-        </li>
-        <li>
-          <Link to={AppRoute.SIGN_UP}>Sign up</Link>
-        </li>
-      </ul>
-      <p>Current path: {pathname}</p>
+      <Header user={authenticatedUser} />
 
       <div>
         <RouterOutlet />
       </div>
-      {isRoot && (
-        <>
-          <h2>Users:</h2>
-          <h3>Status: {dataStatus}</h3>
-          <ul>
-            {users.map((user) => (
-              <li key={user.id}>{user.email}</li>
-            ))}
-          </ul>
-        </>
-      )}
     </>
   );
 };
