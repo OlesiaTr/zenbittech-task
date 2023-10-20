@@ -7,6 +7,8 @@ import {
 
 import { useFormController } from '#libs/hooks/hooks.js';
 
+import { ErrorText, Label, StyledInput, Text } from './input.styled.js';
+
 type Properties<T extends FieldValues> = {
   control: Control<T, null>;
   errors: FieldErrors<T>;
@@ -30,11 +32,11 @@ const Input = <T extends FieldValues>({
   const hasError = Boolean(error);
 
   return (
-    <label>
-      <span>{label}</span>
-      <input {...field} type={type} placeholder={placeholder} />
-      {hasError && <span>{error as string}</span>}
-    </label>
+    <Label>
+      <Text>{label}</Text>
+      <StyledInput {...field} type={type} placeholder={placeholder} />
+      {hasError && <ErrorText>{error as string}</ErrorText>}
+    </Label>
   );
 };
 
