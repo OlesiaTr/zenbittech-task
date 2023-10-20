@@ -1,20 +1,28 @@
 import { ExceptionMessage } from '#libs/enums/enums.js';
-import { AuthError, UsersError } from '#libs/exceptions/exceptions.js';
+import { AuthError } from '#libs/exceptions/exceptions.js';
 import { encrypt } from '#libs/packages/encrypt/encrypt.js';
 import { HTTPCode } from '#libs/packages/http/http.js';
+import { type JWTService } from '#libs/packages/jwt/jwt.js';
 import {
+  type UserAuthResponseDto,
   type UserSignInRequestDto,
+  type UserSignInResponseDto,
   type UserSignUpRequestDto,
   type UserSignUpResponseDto,
 } from '#packages/users/libs/types/types.js';
 import { UserEntity } from '#packages/users/user.entity.js';
 import { type UserService } from '#packages/users/user.service.js';
 
+type Constructor = { userService: UserService; jwtService: JWTService };
+
 class AuthService {
   private userService: UserService;
 
-  public constructor(userService: UserService) {
+  private jwtService: JWTService;
+
+  public constructor({ userService, jwtService }: Constructor) {
     this.userService = userService;
+    this.jwtService = jwtService;
   }
 
   public async signUp(
@@ -36,13 +44,12 @@ class AuthService {
   public async verifyLoginCredentials({
     email,
     password,
-  }: UserSignInRequestDto): Promise<UserEntity | null> {
+  }: UserSignInRequestDto): Promise<UserEntity> {
     const user = await this.userService.findByEmailWithPassword(email);
 
     if (!user) {
-      throw new UsersError({
-        status: HTTPCode.NOT_FOUND,
-        message: ExceptionMessage.USER_NOT_FOUND,
+      throw new AuthError({
+        message: ExceptionMessage.INCORRECT_CREDENTIALS,
       });
     }
 
@@ -55,6 +62,20 @@ class AuthService {
     }
 
     return UserEntity.initialize(user);
+  }
+
+  public getAuthenticatedUser(id: number): Promise<UserAuthResponseDto | null> {
+    return this.userService.findById(id);
+  }
+
+  public async signIn(userEntity: UserEntity): Promise<UserSignInResponseDto> {
+    const user = userEntity.toObject();
+    const token = await this.jwtService.signJWT({ userId: user.id });
+
+    return {
+      user,
+      token,
+    };
   }
 }
 

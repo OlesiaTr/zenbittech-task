@@ -1,4 +1,5 @@
-import { APIPath } from '#libs/enums/enums.js';
+import { APIPath, ExceptionMessage } from '#libs/enums/enums.js';
+import { AuthError } from '#libs/exceptions/exceptions.js';
 import {
   type APIHandlerOptions,
   type APIHandlerResponse,
@@ -7,6 +8,8 @@ import {
 import { HTTPCode } from '#libs/packages/http/http.js';
 import { type Logger } from '#libs/packages/logger/logger.js';
 import {
+  type UserAuthResponseDto,
+  type UserService,
   type UserSignInRequestDto,
   userSignInValidationSchema,
   type UserSignUpRequestDto,
@@ -16,13 +19,22 @@ import {
 import { type AuthService } from './auth.service.js';
 import { AuthApiPath } from './libs/enums/enums.js';
 
+type Constructor = {
+  logger: Logger;
+  authService: AuthService;
+  userService: UserService;
+};
+
 class AuthController extends BaseController {
   private authService: AuthService;
 
-  public constructor(logger: Logger, authService: AuthService) {
+  private userService: UserService;
+
+  public constructor({ logger, authService, userService }: Constructor) {
     super(logger, APIPath.AUTH);
 
     this.authService = authService;
+    this.userService = userService;
 
     this.addRoute({
       path: AuthApiPath.SIGN_UP,
@@ -49,6 +61,17 @@ class AuthController extends BaseController {
             body: UserSignInRequestDto;
           }>,
         ),
+    });
+    this.addRoute({
+      path: AuthApiPath.AUTHENTICATED_USER,
+      method: 'GET',
+      handler: (options) => {
+        return this.getAuthenticatedUser(
+          options as APIHandlerOptions<{
+            user: UserAuthResponseDto;
+          }>,
+        );
+      },
     });
   }
 
@@ -132,7 +155,40 @@ class AuthController extends BaseController {
 
     return {
       status: HTTPCode.OK,
-      payload: user,
+      payload: await this.authService.signIn(user),
+    };
+  }
+
+  /**
+   * @swagger
+   * /auth/authenticated-user:
+   *    get:
+   *      description: Returns an authenticated user
+   *      security:
+   *       - bearerAuth: []
+   *      responses:
+   *        200:
+   *          description: Successful operation
+   *          content:
+   *            application/json:
+   *              schema:
+   *                $ref: '#/components/schemas/User'
+   */
+  private async getAuthenticatedUser(
+    options: APIHandlerOptions<{ user: UserAuthResponseDto }>,
+  ): Promise<APIHandlerResponse> {
+    const user = await this.userService.findById(options.user.id);
+
+    if (!user) {
+      throw new AuthError({
+        message: ExceptionMessage.USER_NOT_FOUND,
+        status: HTTPCode.UNAUTHORIZED,
+      });
+    }
+
+    return {
+      status: HTTPCode.OK,
+      payload: await this.userService.findById(options.user.id),
     };
   }
 }

@@ -10,13 +10,18 @@ extends:
 
 overrides:
   - files:
-    - knexfile.ts
+      - knexfile.ts
     rules:
       'import/no-default-export':
         - off
   - files:
-    - src/db/migrations/**/*.ts
+      - src/db/migrations/**/*.ts
     rules:
       'unicorn/filename-case':
         - error
         - case: snakeCase
+  - files:
+      - src/index.d.ts
+    rules:
+      '@typescript-eslint/consistent-type-definitions':
+        - off

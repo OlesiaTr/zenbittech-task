@@ -1,11 +1,12 @@
+import { jwtService } from '#libs/packages/jwt/jwt.js';
 import { logger } from '#libs/packages/logger/logger.js';
 import { userService } from '#packages/users/users.js';
 
 import { AuthController } from './auth.controller.js';
 import { AuthService } from './auth.service.js';
 
-const authService = new AuthService(userService);
-const authController = new AuthController(logger, authService);
+const authService = new AuthService({ userService, jwtService });
+const authController = new AuthController({ logger, authService, userService });
 
 export { authController, authService };
 export { type AuthService } from './auth.service.js';

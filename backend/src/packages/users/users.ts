@@ -16,6 +16,7 @@ const userService = new UserService({
 
 export { userService };
 export {
+  type UserAuthResponseDto,
   type UserSignInRequestDto,
   type UserSignInResponseDto,
   type UserSignUpRequestDto,
