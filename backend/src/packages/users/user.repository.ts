@@ -16,11 +16,21 @@ class UserRepository implements Repository {
   public async findAll(): Promise<UserEntity[]> {
     const users = await this.userModel.query().execute();
 
-    return users.map((user) => UserEntity.initialize(user));
+    return users.map((user) => {
+      return UserEntity.initialize({
+        id: user.id,
+        email: user.email,
+        passwordHash: user.passwordHash,
+        passwordSalt: user.passwordSalt,
+        name: user.name,
+        createdAt: new Date(user.createdAt),
+        updatedAt: new Date(user.updatedAt),
+      });
+    });
   }
 
   public async create(entity: UserEntity): Promise<UserEntity> {
-    const { email, passwordSalt, passwordHash } = entity.toNewObject();
+    const { email, passwordSalt, passwordHash, name } = entity.toNewObject();
 
     const user = await this.userModel
       .query()
@@ -28,11 +38,20 @@ class UserRepository implements Repository {
         email,
         passwordSalt,
         passwordHash,
+        name,
       })
       .returning('*')
       .execute();
 
-    return UserEntity.initialize(user);
+    return UserEntity.initialize({
+      id: user.id,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      passwordSalt: user.passwordSalt,
+      name: user.name,
+      createdAt: new Date(user.createdAt),
+      updatedAt: new Date(user.updatedAt),
+    });
   }
 
   public update(): ReturnType<Repository['update']> {

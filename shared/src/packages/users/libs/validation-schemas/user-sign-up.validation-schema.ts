@@ -22,7 +22,7 @@ const userSignUp = joi.object<UserSignUpRequestDto, true>({
     'any.required': UserValidationMessage.PASSWORD_REQUIRED,
     'string.empty': UserValidationMessage.PASSWORD_REQUIRED,
   }),
-  fullName: joi.string().trim().required().messages({
+  name: joi.string().trim().required().messages({
     'any.required': UserValidationMessage.NAME_REQUIRED,
     'string.empty': UserValidationMessage.NAME_REQUIRED,
   }),
