@@ -11,32 +11,22 @@ class UserEntity implements Entity {
 
   private name: string;
 
-  private passwordHash: string;
-
-  private passwordSalt: string;
-
-  private constructor({
+  public constructor({
     id,
     email,
     name,
-    passwordHash,
-    passwordSalt,
     createdAt,
     updatedAt,
   }: {
     id: number | null;
     email: string;
     name: string;
-    passwordHash: string;
-    passwordSalt: string;
     createdAt: Date | null;
     updatedAt: Date | null;
   }) {
     this.id = id;
     this.email = email;
     this.name = name;
-    this.passwordHash = passwordHash;
-    this.passwordSalt = passwordSalt;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -45,25 +35,19 @@ class UserEntity implements Entity {
     id,
     email,
     name,
-    passwordHash,
-    passwordSalt,
     createdAt,
     updatedAt,
   }: {
-    id: number;
+    id: number | null;
     email: string;
     name: string;
-    passwordHash: string;
-    passwordSalt: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt: Date | null;
+    updatedAt: Date | null;
   }): UserEntity {
     return new UserEntity({
       id,
       email,
       name,
-      passwordHash,
-      passwordSalt,
       createdAt,
       updatedAt,
     });
@@ -72,20 +56,14 @@ class UserEntity implements Entity {
   public static initializeNew({
     email,
     name,
-    passwordHash,
-    passwordSalt,
   }: {
     email: string;
     name: string;
-    passwordHash: string;
-    passwordSalt: string;
   }): UserEntity {
     return new UserEntity({
       id: null,
       email,
       name,
-      passwordHash,
-      passwordSalt,
       createdAt: null,
       updatedAt: null,
     });
@@ -110,14 +88,10 @@ class UserEntity implements Entity {
   public toNewObject(): {
     email: string;
     name: string;
-    passwordHash: string;
-    passwordSalt: string;
   } {
     return {
       email: this.email,
       name: this.name,
-      passwordHash: this.passwordHash,
-      passwordSalt: this.passwordSalt,
     };
   }
 }

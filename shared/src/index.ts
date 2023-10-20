@@ -2,11 +2,14 @@ export {
   APIPath,
   AppEnvironment,
   ContentType,
+  ExceptionMessage,
   ServerErrorType,
 } from './libs/enums/enums.js';
 export {
   ApplicationError,
+  AuthError,
   HTTPError,
+  UsersError,
   ValidationError,
 } from './libs/exceptions/exceptions.js';
 export { configureString } from './libs/helpers/helpers.js';
