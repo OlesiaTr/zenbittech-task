@@ -1,9 +1,13 @@
-import { PrimaryButton, SecondaryButton } from './button.styled.js';
+import {
+  LandingButton,
+  PrimaryButton,
+  SecondaryButton,
+} from './button.styled.js';
 
 type Properties = {
   label: string;
-  variant: 'primary' | 'secondary';
   onClick?: () => void;
+  variant: 'primary' | 'secondary' | 'landing';
   type?: 'button' | 'submit';
   isWidthFull?: boolean;
 };
@@ -18,6 +22,7 @@ const Button: React.FC<Properties> = ({
   const buttonVariants = {
     primary: PrimaryButton,
     secondary: SecondaryButton,
+    landing: LandingButton,
   };
 
   const ButtonComponent = buttonVariants[variant];

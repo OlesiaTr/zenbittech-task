@@ -27,4 +27,13 @@ const SecondaryButton = styled(PrimaryButton)`
   /* TODO hover/focus */
 `;
 
-export { PrimaryButton, SecondaryButton };
+const LandingButton = styled(PrimaryButton)`
+  background-color: transparent;
+  color: ${theme.colors.white};
+  border: ${theme.borders.normal};
+  ${theme.colors.white};
+  border-radius: 8px;
+  padding: 10px 24px;
+`;
+
+export { LandingButton, PrimaryButton, SecondaryButton };
