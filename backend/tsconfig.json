@@ -1,6 +1,10 @@
 {
   "extends": "../tsconfig.json",
-  "include": ["src", "knexfile.ts"],
+  "include": [
+    "src",
+    "knexfile.ts",
+    "../shared/src/packages/deals/libs/enums/deals-api-path.enum.ts"
+  ],
   "files": ["src/index.d.ts"],
   "exclude": ["node_modules"],
   "compilerOptions": {
