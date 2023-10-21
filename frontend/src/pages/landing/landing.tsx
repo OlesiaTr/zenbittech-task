@@ -1,8 +1,16 @@
 import { Button } from '#libs/components/components.js';
+import { AppRoute } from '#libs/enums/app-route.enum.js';
+import { useCallback, useNavigate } from '#libs/hooks/hooks.js';
 
 import { Container, DescriptionContainer, Title } from './landing.styled.js';
 
 const Landing: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleGetStartedClick = useCallback(() => {
+    navigate(AppRoute.DEALS);
+  }, [navigate]);
+
   return (
     <Container>
       <Title>The chemical negatively charged</Title>
@@ -13,7 +21,12 @@ const Landing: React.FC = () => {
           chemical compound is negatively charged. While the mass defect is
         </p>
       </DescriptionContainer>
-      <Button type="button" label="Get Started" variant="landing" />
+      <Button
+        type="button"
+        label="Get Started"
+        variant="landing"
+        onClick={handleGetStartedClick}
+      />
     </Container>
   );
 };

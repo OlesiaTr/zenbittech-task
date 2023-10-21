@@ -12,6 +12,7 @@ import {
 import { AppRoute } from '#libs/enums/enums.js';
 import { store } from '#libs/packages/store/store.js';
 import { Auth } from '#pages/auth/auth.js';
+import { Deals } from '#pages/deals/deals.js';
 import { Landing } from '#pages/landing/landing.js';
 
 createRoot(document.querySelector('#root') as HTMLElement).render(
@@ -36,9 +37,11 @@ createRoot(document.querySelector('#root') as HTMLElement).render(
                 element: <Auth />,
               },
               {
-                path: AppRoute.OPEN_DEALS,
+                path: AppRoute.DEALS,
                 element: (
-                  <ProtectedRoute>{/* TODO Deals page */}</ProtectedRoute>
+                  <ProtectedRoute>
+                    <Deals />
+                  </ProtectedRoute>
                 ),
               },
             ],
