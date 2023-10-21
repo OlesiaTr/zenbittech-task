@@ -1,4 +1,10 @@
-import { breakpointMobile, breakpointTablet, FontWeight } from './variables.js';
+import {
+  breakpointDesktop,
+  breakpointLargeDesktop,
+  breakpointMobile,
+  breakpointTablet,
+  FontWeight,
+} from './variables.js';
 
 const colors = {
   black: '#172234',
@@ -18,6 +24,8 @@ const fontSizes = {
   xm: '20px',
   l: '24px',
   xl: '28px',
+  xxl: '34px',
+  xxxl: '54px',
   sb: '64px',
 };
 
@@ -50,6 +58,8 @@ const borders = {
 const media = {
   mobile: `max-width: ${breakpointMobile}px`,
   tablet: `max-width: ${breakpointTablet}px`,
+  desktop: `max-width: ${breakpointDesktop}px`,
+  largeDesktop: `max-width: ${breakpointLargeDesktop}px`,
 };
 
 const transitions = {

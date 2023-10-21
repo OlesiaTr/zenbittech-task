@@ -1,5 +1,10 @@
 import { AppRoute } from '#libs/enums/enums.js';
-import { useAppDispatch, useCallback, useNavigate } from '#libs/hooks/hooks.js';
+import {
+  useAppDispatch,
+  useCallback,
+  useLocation,
+  useNavigate,
+} from '#libs/hooks/hooks.js';
 import { type UserAuthResponseDto } from '#packages/users/users.js';
 import { actions as authActions } from '#slices/auth/auth.js';
 
@@ -13,6 +18,7 @@ type Properties = {
 const Header: React.FC<Properties> = ({ user }: Properties) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { pathname } = useLocation();
 
   const handleLogInClick = useCallback(() => {
     navigate(AppRoute.SIGN_IN);
@@ -28,13 +34,7 @@ const Header: React.FC<Properties> = ({ user }: Properties) => {
 
   return (
     <HeaderWrapper>
-      {user ? (
-        <Button
-          label="Sign Out"
-          variant="primary"
-          onClick={handleSignOutClick}
-        />
-      ) : (
+      {pathname === AppRoute.ROOT && (
         <>
           <Button
             label="Log In"
@@ -47,6 +47,14 @@ const Header: React.FC<Properties> = ({ user }: Properties) => {
             onClick={handleSignUpClick}
           />
         </>
+      )}
+
+      {user && (
+        <Button
+          label="Sign Out"
+          variant="primary"
+          onClick={handleSignOutClick}
+        />
       )}
     </HeaderWrapper>
   );

@@ -9,9 +9,11 @@ import { AppEnvironment } from '#libs/enums/enums.js';
 import { type Config } from '#libs/packages/config/config.js';
 import { notification } from '#libs/packages/notification/notification.js';
 import { authApi } from '#packages/auth/auth.js';
+import { dealsApi } from '#packages/deals/deals.js';
 import { userApi } from '#packages/users/users.js';
 import { reducer as appReducer } from '#slices/app/app.js';
 import { reducer as authReducer } from '#slices/auth/auth.js';
+import { reducer as dealsReducer } from '#slices/deals/deals.js';
 import { reducer as usersReducer } from '#slices/users/users.js';
 
 import { storage } from '../storage/storage.js';
@@ -20,6 +22,7 @@ type RootReducer = {
   auth: ReturnType<typeof authReducer>;
   users: ReturnType<typeof usersReducer>;
   app: ReturnType<typeof appReducer>;
+  deals: ReturnType<typeof dealsReducer>;
 };
 
 type ExtraArguments = {
@@ -27,6 +30,7 @@ type ExtraArguments = {
   userApi: typeof userApi;
   storage: typeof storage;
   notification: typeof notification;
+  dealsApi: typeof dealsApi;
 };
 
 class Store {
@@ -45,6 +49,7 @@ class Store {
         auth: authReducer,
         users: usersReducer,
         app: appReducer,
+        deals: dealsReducer,
       },
       middleware: (getDefaultMiddleware) => {
         return getDefaultMiddleware({
@@ -62,6 +67,7 @@ class Store {
       userApi,
       notification,
       storage,
+      dealsApi,
     };
   }
 }
