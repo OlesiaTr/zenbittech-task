@@ -36,7 +36,7 @@ class BaseDatabase implements Database {
       client: this.appConfig.ENV.DB.DIALECT,
       connection: {
         connectionString: this.appConfig.ENV.DB.CONNECTION_STRING,
-        ssl: { rejectUnauthorized: false },
+        // ssl: { rejectUnauthorized: false },
       },
       pool: {
         min: this.appConfig.ENV.DB.POOL_MIN,

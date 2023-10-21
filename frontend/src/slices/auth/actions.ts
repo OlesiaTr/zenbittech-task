@@ -22,7 +22,7 @@ const signUp = createAsyncThunk<
 
   await storage.set(StorageKey.TOKEN, token);
 
-  dispatch(appActions.navigate(AppRoute.ROOT));
+  dispatch(appActions.navigate(AppRoute.DEALS));
 
   return user;
 });
@@ -37,7 +37,7 @@ const signIn = createAsyncThunk<
 
   await storage.set(StorageKey.TOKEN, token);
 
-  dispatch(appActions.navigate(AppRoute.ROOT));
+  dispatch(appActions.navigate(AppRoute.DEALS));
 
   return user;
 });
